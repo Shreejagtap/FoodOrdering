@@ -14,7 +14,7 @@ function TabBarIcon(props: {
 }) {
   return (
     <FontAwesome
-      size={28}
+      size={20}
       style={{ marginBottom: -3 }}
       {...props}
     />
@@ -35,11 +35,16 @@ export default function TabLayout() {
     >
       <Tabs.Screen
         name="index"
+        options={{ href: null }}
+      />
+      <Tabs.Screen
+        name="menu"
         options={{
-          title: "Tab One",
+          title: "Menu",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon
-              name="code"
+              name="cutlery"
               color={color}
             />
           ),
@@ -51,7 +56,7 @@ export default function TabLayout() {
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
-                    name="info-circle"
+                    name="user"
                     size={25}
                     color={Colors[colorScheme ?? "light"].text}
                     style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
@@ -65,10 +70,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="two"
         options={{
-          title: "Tab Two",
+          title: "Orders",
           tabBarIcon: ({ color }) => (
             <TabBarIcon
-              name="code"
+              name="list"
               color={color}
             />
           ),
