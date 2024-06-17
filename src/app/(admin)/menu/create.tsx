@@ -3,9 +3,9 @@ import Button from "@/components/Button";
 import { defaultPizzaImage } from "@/components/ProductListItem";
 import Colors from "@/constants/Colors";
 import { useState } from "react";
-import { View, Text, StyleSheet, TextInput, Image } from "react-native";
+import { View, Text, StyleSheet, TextInput, Image, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 //Main Component
 const CreateProductScreen = () => {
@@ -15,12 +15,17 @@ const CreateProductScreen = () => {
   const [error, setError] = useState("");
   const [image, setImage] = useState("");
 
+  //Getting Params
+  const { id } = useLocalSearchParams();
+  const isUpdating = !!id;
+
   //Functions
   const resertFields = () => {
     setName("");
     setPrice("");
   };
 
+  //Input Validation
   const validateInput = () => {
     setError("");
     if (!name) {
@@ -38,6 +43,16 @@ const CreateProductScreen = () => {
     return true;
   };
 
+  //Intermediate function for handling submit button
+  const onSubmit = () => {
+    if (isUpdating) {
+      onUpdate();
+    } else {
+      onCreate();
+    }
+  };
+
+  //Creating product
   const onCreate = () => {
     if (!validateInput()) {
       return;
@@ -46,6 +61,34 @@ const CreateProductScreen = () => {
     resertFields();
   };
 
+  //Updating product
+  const onUpdate = () => {
+    if (!validateInput()) {
+      return;
+    }
+    console.warn("Updating Product: ", name);
+    resertFields();
+  };
+
+  //Deleting product
+  const onDelete = () => {
+    console.warn("Deleted");
+  };
+
+  const confirmDelete = () => {
+    Alert.alert("Confirm", "Are you sure you want to delete this product?", [
+      {
+        text: "Cancel",
+      },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: onDelete,
+      },
+    ]);
+  };
+
+  //Image Picker
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -63,7 +106,9 @@ const CreateProductScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: "Create Product" }} />
+      <Stack.Screen
+        options={{ title: isUpdating ? "Update Product" : "Create Product" }}
+      />
       <Image
         source={{ uri: image || defaultPizzaImage }}
         style={styles.image}
@@ -91,9 +136,17 @@ const CreateProductScreen = () => {
       />
       <Text style={{ color: "red" }}>{error}</Text>
       <Button
-        onPress={onCreate}
-        text="Create"
+        onPress={onSubmit}
+        text={isUpdating ? "Update" : "Create"}
       />
+      {isUpdating && (
+        <Text
+          onPress={confirmDelete}
+          style={styles.textButton}
+        >
+          Delete
+        </Text>
+      )}
     </View>
   );
 };
