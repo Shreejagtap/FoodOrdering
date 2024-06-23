@@ -26,7 +26,10 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors.light.background,
         tabBarInactiveTintColor: "gainsboro",
-        tabBarStyle: { backgroundColor: Colors.light.tint },
+        tabBarStyle: {
+          backgroundColor: Colors.light.tint,
+        },
+
         headerShown: useClientOnlyValue(false, true),
       }}
     >
@@ -48,9 +51,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="orders"
         options={{
           title: "Orders",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon
               name="list"

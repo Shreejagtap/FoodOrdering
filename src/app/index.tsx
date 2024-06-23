@@ -13,7 +13,7 @@ const index = () => {
         <Button text="User" />
       </Link>
       <Link
-        href={"/(auth)"}
+        href={"/sign-in"}
         asChild
       >
         <Button text="Auth" />

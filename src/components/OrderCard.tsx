@@ -1,6 +1,10 @@
 import { Order } from "@/types";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { Link, useSegments } from "expo-router";
 import { View, Text, StyleSheet, Pressable } from "react-native";
+
+dayjs.extend(relativeTime);
 
 type OrderCardProps = {
   order: Order;
@@ -9,7 +13,6 @@ type OrderCardProps = {
 const OrderCard = ({ order }: OrderCardProps) => {
   const d = new Date();
   //   const subtractedDate = 1;
-  const subtractedDate = d.getHours() - Number(order.created_at.slice(11, 13));
 
   const segments = useSegments();
 
@@ -22,11 +25,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
         <View style={styles.sectionOne}>
           <Text style={styles.idText}>Order #{order.id}</Text>
           <Text style={styles.timeText}>
-            {subtractedDate < 1
-              ? "less than an hour ago"
-              : subtractedDate < 2
-              ? "1 hour ago"
-              : `${subtractedDate} hours ago`}
+            {dayjs(order.created_at).fromNow()}
           </Text>
         </View>
 
